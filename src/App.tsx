@@ -1,9 +1,13 @@
+import ChessLayout from "./components/ChessLayout/ChessLayout";
+
 import "./App.css";
 
 function App() {
-  return <>
-    Chess
-  </>;
+  return (
+    <>
+      <ChessLayout></ChessLayout>
+    </>
+  );
 }
 
 export default App;

@@ -1,0 +1,16 @@
+.chessBoard {
+  background-color: burlywood;
+  width: 80vmin;
+  height: auto;
+  min-width: 32rem;
+  max-width: 80rem;
+  aspect-ratio: 1/1;
+  border-radius: 0.8rem;
+  align-self: center;
+}
+
+@media screen and (max-width: 576px) {
+  .chessBoard {
+    max-width: 50rem;
+  }
+}

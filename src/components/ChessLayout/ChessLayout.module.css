@@ -1,0 +1,12 @@
+.chessLayout {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 1.2rem;
+}
+
+@media screen and (max-width: 576px) {
+  .chessLayout {
+    flex-direction: column;
+  }
+}
