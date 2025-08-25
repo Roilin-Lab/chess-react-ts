@@ -1,10 +1,11 @@
 .chessPanel{
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: black;
-  width: 100%;
+  /* width: auto; */
   max-width: 30rem;
+  min-width: 10rem;
   height: 100px;
 }
 

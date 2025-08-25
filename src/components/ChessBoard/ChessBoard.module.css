@@ -1,12 +1,14 @@
 .chessBoard {
   background-color: burlywood;
-  width: 80vmin;
+  width: 90vmin;
   height: auto;
-  min-width: 32rem;
-  max-width: 80rem;
   aspect-ratio: 1/1;
   border-radius: 0.8rem;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  overflow: hidden;
   align-self: center;
+  text-align: center;
 }
 
 @media screen and (max-width: 576px) {

@@ -1,20 +1,21 @@
-import React, { useContext } from 'react'
-import { GameContext, type GameContextType } from '../ChessLayout/ChessLayout'
- 
-import classes from './ChessPanel.module.css'
+import React from "react";
 
-interface ChessPanelProps {
+import classes from "./ChessPanel.module.css";
+import type { PositionsType } from "../../chess/types";
+import { useGameContext } from "../../contexts";
 
-}
+interface ChessPanelProps {}
 
 const ChessPanel: React.FC<ChessPanelProps> = ({}) => {
-  const { move } = useContext(GameContext) as GameContextType;
+  const { positions } = useGameContext();
 
   return (
     <div className={classes.chessPanel}>
-      {move}
+      {Object.keys(positions as PositionsType).map((id: string) => (
+        <span key={id}>{id}</span>
+      ))}
     </div>
-  )
-}
+  );
+};
 
 export default ChessPanel;
