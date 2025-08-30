@@ -1,2 +1,3 @@
-export { GameContextProvider, useGameContext, type GameContextType } from "./GameContext";
-export { BoardContextProvider, useBoardContext, type BoardContextType } from "./BoardContext";
+export { useGameContext } from "./GameContext";
+export { useBoardContext } from "./BoardContext";
+export { ChessboardProvider } from "./ChessboardProvider";

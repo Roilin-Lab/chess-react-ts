@@ -12,11 +12,13 @@ interface SquareProps extends PropsWithChildren {
   id: SquareIdType;
   color: Color;
   piece?: PieceType;
+  isSelected?: boolean;
+
   onClick: (event: MouseEvent, square: SquareIdType) => void;
 }
 
 const Square: FC<SquareProps> = memo(
-  ({ id, color, onClick, piece }: SquareProps) => {
+  ({ id, color, onClick, piece, isSelected }: SquareProps) => {
     const squareStyle: CSSProperties = {
       position: "relative",
       width: "100%",
@@ -39,7 +41,7 @@ const Square: FC<SquareProps> = memo(
         >
           {id}
         </span>
-        {piece && <Piece {...piece} position={id} onClick={onClick}></Piece>}
+        {piece && <Piece {...piece} position={id} onClick={onClick} isSelected={isSelected}></Piece>}
       </div>
     );
   }
