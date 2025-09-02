@@ -1,24 +1,23 @@
 import {
   type FC,
-  type MouseEvent,
   type PropsWithChildren,
   type CSSProperties,
   memo,
+  useCallback,
 } from "react";
 import type { Color, PieceType, SquareIdType } from "../chess/types";
+import { useActionsContext } from "../contexts/ActionsContext";
 import Piece from "./Piece";
 
 interface SquareProps extends PropsWithChildren {
   id: SquareIdType;
   color: Color;
   piece?: PieceType;
-  isSelected?: boolean;
-
-  onClick: (event: MouseEvent, square: SquareIdType) => void;
+  isSelect: boolean;
 }
 
 const Square: FC<SquareProps> = memo(
-  ({ id, color, onClick, piece, isSelected }: SquareProps) => {
+  ({ id, color, piece, isSelect, children }: SquareProps) => {
     const squareStyle: CSSProperties = {
       position: "relative",
       width: "100%",
@@ -28,9 +27,10 @@ const Square: FC<SquareProps> = memo(
       color: color === "w" ? "#769656" : "#eeeed2",
       userSelect: "none",
     };
+    const { onMove, onSelect } = useActionsContext();
 
     return (
-      <div id={id} style={squareStyle}>
+      <div id={id} style={squareStyle} onClick={(e) => onMove(e, id)}>
         <span
           style={{
             position: "absolute",
@@ -41,7 +41,18 @@ const Square: FC<SquareProps> = memo(
         >
           {id}
         </span>
-        {piece && <Piece {...piece} position={id} onClick={onClick} isSelected={isSelected}></Piece>}
+        {isSelect && (
+          <div
+            style={{
+              backgroundColor: "yellow",
+              opacity: "0.5",
+              position: "absolute",
+              inset: "0",
+            }}
+          ></div>
+        )}
+        {/* {children} */}
+        {piece && <Piece {...piece} />}
       </div>
     );
   }

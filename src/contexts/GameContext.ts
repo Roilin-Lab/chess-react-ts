@@ -2,12 +2,13 @@ import {
   createContext,
   useContext,
 } from "react";
-import type { Color, PieceType, PositionsType } from "../chess";
+import type { Color, PieceType, PositionsType, SquareIdType } from "../chess";
 
 export type GameContextType = {
   move: Color;
-  positions?: PositionsType;
+  positions: PositionsType;
   selectedPiece: PieceType | null;
+  selectedSquare: SquareIdType | null;
 };
 
 export const GameContext = createContext<GameContextType | null>(null);

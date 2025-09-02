@@ -8,6 +8,7 @@ import { type SquareType, type Color, type SquareIdType } from "../chess";
 export type ActionsContextType = {
   onMove: (event: MouseEvent, square: SquareIdType) => void;
   onRightClick: (event: MouseEvent) => void;
+  onSelect: (event: MouseEvent, square: SquareIdType) => void;
 };
 
 export const ActionsContext = createContext<ActionsContextType | null>(null);

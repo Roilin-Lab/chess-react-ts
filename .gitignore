@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Draw.io
+*.drawio
+*.drawio.dtmp
