@@ -43,16 +43,17 @@ const Square: FC<SquareProps> = memo(
         </span>
         {isSelect && (
           <div
-            style={{
-              backgroundColor: "yellow",
-              opacity: "0.5",
-              position: "absolute",
-              inset: "0",
-            }}
+          style={{
+            backgroundColor: "yellow",
+            opacity: '0.5',
+            position: "absolute",
+            inset: '0'
+
+          }}
           ></div>
         )}
         {/* {children} */}
-        {piece && <Piece {...piece} />}
+        {piece && <Piece {...piece}/>}
       </div>
     );
   }

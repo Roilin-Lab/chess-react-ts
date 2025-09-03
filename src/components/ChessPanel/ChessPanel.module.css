@@ -1,7 +1,7 @@
 .chessPanel{
   position: relative;
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   background-color: black;
   /* width: auto; */
   max-width: 30rem;

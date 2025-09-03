@@ -10,6 +10,13 @@ export type PieceType = {
   type: "p" | "n" | "b" | "r" | "k" | "q";
   color: Color;
 };
+export type Move = {
+  id: number;
+  piece: PieceType;
+  source: SquareIdType;
+  target: SquareIdType;
+}
 export type PositionsType = {
   [square in SquareIdType]: PieceType;
 };
+export type HistoryMoves = Move[];
