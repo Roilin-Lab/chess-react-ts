@@ -1,23 +1,29 @@
 import React from "react";
 
 import classes from "./ChessPanel.module.css";
-import type { PositionsType } from "../../chess/types";
+import "./ChessPanel.module.css";
 import { useGameContext } from "../../contexts";
+import type { Move } from "chess.js";
 
 interface ChessPanelProps {}
 
 const ChessPanel: React.FC<ChessPanelProps> = ({}) => {
-  const { history, move } = useGameContext();
+  const { chess } = useGameContext();
 
+  let moveNumber = 1;
   return (
     <>
-      <span>{move}</span>
       <div className={classes.chessPanel}>
-        {history.map((move) => (
-          <span>
-            {move.id}. {move.source} - {move.target}
-          </span>
-        ))}
+        {chess.history({ verbose: true }).map((move, index) => {
+          return (
+            <>
+              {index % 2 === 0
+               ? <div>{moveNumber++}</div>
+               : null}
+              <div>{move.san}</div>
+            </>
+          );
+        })}
       </div>
     </>
   );

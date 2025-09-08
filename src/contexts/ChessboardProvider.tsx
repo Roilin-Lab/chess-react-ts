@@ -12,27 +12,29 @@ import { ActionsContext, type ActionsContextType } from "./ActionsContext";
 import {
   generateBoard,
   type Color,
-  type PieceType,
-  type PositionsType,
   type SquareIdType,
-  type Move,
+  type SquareType,
 } from "../chess";
 import { positionsFromFen } from "../chess/utils";
+import { Chess, type Move } from "chess.js";
 
 interface ChessboardProviderProps extends PropsWithChildren {}
+
+const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 export const ChessboardProvider: FC<ChessboardProviderProps> = ({
   children,
 }) => {
   const [boardOrientation, setBoardOrientation] = useState<Color>("w");
-  const [gameState, setGameState] = useState<GameContextType>({
+  const [selectedSquare, setSelectedSquare] = useState<SquareIdType | null>(
+    null
+  );
+
+  const [state, setState] = useState<GameContextType>({
+    chess: new Chess(FEN),
     move: "w",
-    positions: positionsFromFen(
-      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-    ),
+    positions: positionsFromFen(FEN),
     history: [],
-    selectedPiece: null,
-    selectedSquare: null,
   });
 
   const handleContextMenu = useCallback((e: MouseEvent) => {
@@ -41,56 +43,40 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
       boardOrientation === "w" ? "b" : "w"
     );
   }, []);
-  const handleMove = useCallback((e: MouseEvent, square: SquareIdType) => {
-    setGameState((prevState) => {
-      if (
-        prevState.selectedPiece &&
-        prevState.selectedSquare &&
-        (!prevState.positions[square] ||
-          prevState.positions[square].color !== prevState.selectedPiece.color)
-      ) {
+  const handleMove = useCallback(
+    (e: MouseEvent, square: SquareType, move: Move) => {
+      setState((prevState) => {
         const newPos = { ...prevState.positions };
-        newPos[square] = prevState.selectedPiece;
-        delete newPos[prevState.selectedSquare];
-
-        const move: Move = {
-          id: prevState.history.length + 1,
-          piece: prevState.selectedPiece,
-          source: prevState.selectedSquare,
-          target: square,
-        }
+        newPos[square] = { type: move.piece, color: move.color };
+        delete newPos[move.from];
 
         return {
           ...prevState,
-          move: prevState.move === 'w' ? 'b' : 'w', 
-          positions: newPos,
-          history: [...prevState.history, move],
-          selectedSquare: null,
-          selectedPiece: null,
+          move: prevState.move === "w" ? "b" : "w",
+          positions: { ...newPos },
         };
-      } else if (
-        prevState.positions[square] &&
-        prevState.selectedSquare !== square &&
-        prevState.positions[square].color === prevState.move
-      ) {
-        return {
-          ...prevState,
-          selectedSquare: square,
-          selectedPiece: prevState.positions?.[square],
-        };
-      }
+      });
+      console.log(move);
+      
+      state.chess.move({ from: move.from, to: move.to });
+    },
+    []
+  );
 
-      return prevState;
-    });
+  const handleSelect = useCallback((e: MouseEvent, square: SquareType) => {
+
   }, []);
-  
-  const handleSelect = useCallback((_e: MouseEvent, square: SquareIdType) => {},
-  []);
 
+  const board = useMemo(
+    () => generateBoard(boardOrientation),
+    [boardOrientation]
+  );
   const boardValue: BoardContextType = useMemo(
     () => ({
-      board: generateBoard(boardOrientation),
+      board: board,
       boardOrientation,
+      selected: selectedSquare,
+
     }),
     [boardOrientation]
   );
@@ -99,12 +85,13 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
       onRightClick: handleContextMenu,
       onMove: handleMove,
       onSelect: handleSelect,
+      setSelectedSquare,
     }),
     []
   );
 
   return (
-    <GameContext.Provider value={gameState}>
+    <GameContext.Provider value={state}>
       <BoardContext.Provider value={boardValue}>
         <ActionsContext.Provider value={actionsValue}>
           {children}

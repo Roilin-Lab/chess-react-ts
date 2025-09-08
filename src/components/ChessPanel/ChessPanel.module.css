@@ -1,12 +1,17 @@
-.chessPanel{
+.chessPanel {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: min-content;
   background-color: black;
-  /* width: auto; */
+  height: 90vmin;
+
+  overflow: auto;
+  scrollbar-width: thin;
+  -webkit-scrollbar-color: hsl(0, 58%, 43%);
+  scrollbar-color: hsl(0, 58%, 43%);
   max-width: 30rem;
   min-width: 10rem;
-  height: 100px;
 }
 
 @media screen and (max-width: 576px) {

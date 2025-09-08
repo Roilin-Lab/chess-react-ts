@@ -3,21 +3,32 @@ import {
   type PropsWithChildren,
   type CSSProperties,
   memo,
-  useCallback,
+  type MouseEvent,
 } from "react";
-import type { Color, PieceType, SquareIdType } from "../chess/types";
-import { useActionsContext } from "../contexts/ActionsContext";
-import Piece from "./Piece";
+import type { Color, SquareType } from "../chess/types";
+import PieceComponent from "./Piece";
+import type { Piece } from "chess.js";
 
 interface SquareProps extends PropsWithChildren {
-  id: SquareIdType;
+  id: SquareType;
   color: Color;
-  piece?: PieceType;
+  piece?: Piece;
   isSelect: boolean;
+  isAvalible: boolean;
+  onSelect: (e: MouseEvent, id: SquareType) => void;
+  onMove: (e: MouseEvent, id: SquareType) => void;
 }
 
 const Square: FC<SquareProps> = memo(
-  ({ id, color, piece, isSelect, children }: SquareProps) => {
+  ({
+    id,
+    color,
+    piece,
+    isSelect,
+    isAvalible,
+    onSelect,
+    onMove,
+  }: SquareProps) => {
     const squareStyle: CSSProperties = {
       position: "relative",
       width: "100%",
@@ -27,10 +38,19 @@ const Square: FC<SquareProps> = memo(
       color: color === "w" ? "#769656" : "#eeeed2",
       userSelect: "none",
     };
-    const { onMove, onSelect } = useActionsContext();
 
     return (
-      <div id={id} style={squareStyle} onClick={(e) => onMove(e, id)}>
+      <div
+        id={id}
+        style={squareStyle}
+        onMouseDown={(e) => {
+          if (isAvalible) {  
+            onMove(e, id)
+          } else {
+            onSelect(e, id);
+          }
+        }}
+      >
         <span
           style={{
             position: "absolute",
@@ -43,17 +63,25 @@ const Square: FC<SquareProps> = memo(
         </span>
         {isSelect && (
           <div
-          style={{
-            backgroundColor: "yellow",
-            opacity: '0.5',
-            position: "absolute",
-            inset: '0'
-
-          }}
+            style={{
+              backgroundColor: "yellow",
+              opacity: "0.5",
+              position: "absolute",
+              inset: "0",
+            }}
           ></div>
         )}
-        {/* {children} */}
-        {piece && <Piece {...piece}/>}
+        {isAvalible && (
+          <div
+            style={{
+              backgroundColor: "red",
+              opacity: "0.5",
+              position: "absolute",
+              inset: "0",
+            }}
+          ></div>
+        )}
+        {piece && <PieceComponent {...piece} />}
       </div>
     );
   }
