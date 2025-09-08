@@ -51,16 +51,6 @@ const Square: FC<SquareProps> = memo(
           }
         }}
       >
-        <span
-          style={{
-            position: "absolute",
-            top: "30%",
-            left: "35%",
-            fontSize: "1.6rem",
-          }}
-        >
-          {id}
-        </span>
         {isSelect && (
           <div
             style={{

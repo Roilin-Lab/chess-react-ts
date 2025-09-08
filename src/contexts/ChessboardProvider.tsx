@@ -56,8 +56,6 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
           positions: { ...newPos },
         };
       });
-      console.log(move);
-      
       state.chess.move({ from: move.from, to: move.to });
     },
     []

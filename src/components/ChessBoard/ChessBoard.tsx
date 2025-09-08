@@ -44,8 +44,6 @@ const ChessBoard: FC<ChessBoardProps> = () => {
       setAvalibleSquare([]);
     }
   };
-  console.log(chess.board());
-  
 
   return (
     <div className={classes.chessBoard} onContextMenu={onRightClick}>

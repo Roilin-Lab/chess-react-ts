@@ -1,8 +1,8 @@
-import type { PieceType, PositionsType, SquareIdType } from "./types";
+import type { PieceType, PositionsType, SquareType } from "./types";
 
-export function indexesToSquareId(row: number, col: number): SquareIdType {
+export function indexesToSquareId(row: number, col: number): SquareType {
   const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  return `${alphabet[col]}${8 - row}` as SquareIdType;
+  return `${alphabet[col]}${8 - row}` as SquareType;
 }
 
 export function positionsFromFen(fen: string): PositionsType {
