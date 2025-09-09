@@ -1,16 +1,16 @@
 import React from "react";
 
-import "./ChessPanel.module.css";
 import { useGameContext } from "../../contexts";
 import HistoryList from "../ui/HistoryList";
 import styled from "styled-components";
+import { replacePieceToUnicodeIcon } from "../../chess/utils";
 
 interface ChessPanelProps {}
 
 const PanelContainer = styled.div`
   position: relative;
   width: 100%;
-  
+  height: 90vmin;
   max-width: 30rem;
   min-width: 25rem;
   flex: 1 1;
@@ -30,6 +30,7 @@ const ChessPanel: React.FC<ChessPanelProps> = ({}) => {
       <PanelContainer>
         <HistoryList>
           {chess.history({ verbose: true }).map((move, index) => {
+            const moveWithIcon = replacePieceToUnicodeIcon(move);
             return (
               <>
                 {index % 2 === 0 ? (
@@ -37,7 +38,7 @@ const ChessPanel: React.FC<ChessPanelProps> = ({}) => {
                     {moveNumber++}
                   </HistoryList.Index>
                 ) : null}
-                <HistoryList.Move key={move.san}>{move.san}</HistoryList.Move>
+                <HistoryList.Move key={move.san}>{moveWithIcon}</HistoryList.Move>
               </>
             );
           })}

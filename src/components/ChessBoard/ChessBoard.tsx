@@ -11,8 +11,8 @@ import SquareComponent from "../Square";
 import classes from "./ChessBoard.module.css";
 import { useBoardContext, useGameContext } from "../../contexts";
 import { useActionsContext } from "../../contexts/ActionsContext";
-import type { SquareIdType } from "../../chess";
 import type { Move, Square } from "chess.js";
+import "./ChessBoard.module.css";
 
 interface ChessBoardProps extends PropsWithChildren {}
 
@@ -50,11 +50,9 @@ const ChessBoard: FC<ChessBoardProps> = () => {
       {board.map((row, rowIndex) =>
         row.map((square, colIndex) => {
           const piece = positions?.[square];
-          const color = (rowIndex + colIndex) % 2 === 0 ? "w" : "b"
+          const color = (rowIndex + colIndex) % 2 === 0 ? "w" : "b";
           const isSelected = selected === square;
-          const isAvalible = avalibleSquare.find(
-            (move) => move.to === square
-          )
+          const isAvalible = avalibleSquare.find((move) => move.to === square)
             ? true
             : false;
 
@@ -67,7 +65,7 @@ const ChessBoard: FC<ChessBoardProps> = () => {
               isSelect={isSelected}
               isAvalible={isAvalible}
               onSelect={useCallback(handleSelect, [])}
-              onMove={useCallback(handleMove, [isAvalible])}
+              onMove={useCallback(handleMove, [])}
             />
           );
         })

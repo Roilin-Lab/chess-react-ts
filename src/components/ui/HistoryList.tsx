@@ -1,4 +1,4 @@
-import { useEffect, type FC, type PropsWithChildren } from "react";
+import { useEffect, useRef, type FC, type PropsWithChildren, type ReactElement } from "react";
 import styled from "styled-components";
 
 interface HistoryListProps extends PropsWithChildren {}
@@ -42,11 +42,14 @@ const MoveListItem = styled.div`
 `;
 
 const HistoryList = ({ children }: HistoryListProps) => {
+  const listRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    console.log("scroll");
+    const list = listRef.current;
+    if (list) list.scrollTop = list.scrollHeight;
   }, [children]);
 
-  return <ListWrapper>{children}</ListWrapper>;
+  return <ListWrapper ref={listRef}>{children}</ListWrapper>;
 };
 
 HistoryList.Index = ({ children }: HistoryListIndexProps) => {

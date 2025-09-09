@@ -1,3 +1,4 @@
+import type { Move } from "chess.js";
 import type { PieceType, PositionsType, SquareType } from "./types";
 
 export function indexesToSquareId(row: number, col: number): SquareType {
@@ -28,3 +29,17 @@ export function positionsFromFen(fen: string): PositionsType {
 
   return positions;
 }
+
+export function replacePieceToUnicodeIcon(move: Move): string | null {
+  const unicodeBlackPiece = {
+    k: '♔', q: '♕', r: '♖', n: '♘', b: '♗', p: '♙'
+  }
+  const unicodeWhitePiece = {
+    k: '♚', q: '♛', r: '♜', n: '♞', b: '♝', p: '♟'
+  }
+  const piece = move.color === "w"
+    ? unicodeWhitePiece[move.piece]
+    : unicodeBlackPiece[move.piece];
+
+  return move.san.replace(/^[KQRNB]/, piece);
+};
