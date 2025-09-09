@@ -1,4 +1,4 @@
-import type { Move } from "chess.js";
+import type { Color, Move, PieceSymbol, Square } from "chess.js";
 import type { PieceType, PositionsType, SquareType } from "./types";
 
 export function indexesToSquareId(row: number, col: number): SquareType {
@@ -32,14 +32,46 @@ export function positionsFromFen(fen: string): PositionsType {
 
 export function replacePieceToUnicodeIcon(move: Move): string | null {
   const unicodeBlackPiece = {
-    k: '♔', q: '♕', r: '♖', n: '♘', b: '♗', p: '♙'
-  }
+    k: "♔",
+    q: "♕",
+    r: "♖",
+    n: "♘",
+    b: "♗",
+    p: "♙",
+  };
   const unicodeWhitePiece = {
-    k: '♚', q: '♛', r: '♜', n: '♞', b: '♝', p: '♟'
-  }
-  const piece = move.color === "w"
-    ? unicodeWhitePiece[move.piece]
-    : unicodeBlackPiece[move.piece];
+    k: "♚",
+    q: "♛",
+    r: "♜",
+    n: "♞",
+    b: "♝",
+    p: "♟",
+  };
+  const piece =
+    move.color === "w"
+      ? unicodeWhitePiece[move.piece]
+      : unicodeBlackPiece[move.piece];
 
   return move.san.replace(/^[KQRNB]/, piece);
-};
+}
+
+export function boardToPositions(
+  board: ({
+    square: Square;
+    type: PieceSymbol;
+    color: Color;
+  } | null)[][]
+): PositionsType {
+  const positions = {} as PositionsType;
+  board.map((row) => {
+    row.map((position) => {
+      if (position) {
+        positions[position.square] = {
+          type: position.type,
+          color: position.color,
+        };
+      }
+    });
+  });
+  return positions;
+}

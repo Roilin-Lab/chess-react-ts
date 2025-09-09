@@ -1,5 +1,4 @@
 export type {
-  SquareIdType,
   SquareType,
   PieceType,
   PositionsType,

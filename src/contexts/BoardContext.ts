@@ -3,7 +3,7 @@ import {
   useContext,
   type MouseEvent,
 } from "react";
-import { type SquareType, type Color, type SquareIdType } from "../chess";
+import { type SquareType, type Color } from "../chess";
 
 export type BoardContextType = {
   board: SquareType[][];

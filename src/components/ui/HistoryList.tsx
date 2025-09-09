@@ -15,10 +15,7 @@ const ListWrapper = styled.div`
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: darkgray transparent;
-  background-color: #262421;
-  border-radius: 0.7rem;
-  border: 1px solid #3c3b3a;
-  font-family: "Noto Sans", sans-serif;
+
   font-size: 2.2rem;
 
   @media (max-width: 576px) {

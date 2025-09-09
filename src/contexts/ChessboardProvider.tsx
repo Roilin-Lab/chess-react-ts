@@ -15,7 +15,7 @@ import {
   type PositionsType,
   type SquareType,
 } from "../chess";
-import { positionsFromFen } from "../chess/utils";
+import { boardToPositions, positionsFromFen } from "../chess/utils";
 import { Chess, type Move, type Square } from "chess.js";
 
 interface ChessboardProviderProps extends PropsWithChildren {}
@@ -46,18 +46,11 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
   const onMove = useCallback(
     (e: MouseEvent, square: SquareType) => {
       const move = avalibleSquare.find((move) => move.to === square);
-      console.log(avalibleSquare);
       if (move) {
-        setPositions((prevPositions) => {
-          const newPos = { ...prevPositions };
-          newPos[square] = { type: move.piece, color: move.color };
-          delete newPos[move.from];
-
-          return { ...newPos };
-        });
+        chess.move({ from: move.from, to: move.to });
+        setPositions(boardToPositions(chess.board()));
         setSelected(null);
         setAvalibleSquare([]);
-        chess.move({ from: move.from, to: move.to });
       }
     },
     [positions, selected, avalibleSquare]
@@ -74,6 +67,16 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
     }
   }, []);
 
+  const onReset = useCallback(() => {
+    chess.reset();
+    setPositions(boardToPositions(chess.board()));
+  }, []);
+
+  const onUndo = useCallback(() => {
+    chess.undo();
+    setPositions(boardToPositions(chess.board()));
+  }, []);
+
   const boardValue: BoardContextType = useMemo(
     () => ({
       board: board,
@@ -86,6 +89,8 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
       onRightClick,
       onMove,
       onSelect,
+      onReset,
+      onUndo
     }),
     [onMove, onSelect, onRightClick]
   );

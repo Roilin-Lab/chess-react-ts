@@ -9,6 +9,8 @@ export type ActionsContextType = {
   onMove: (event: MouseEvent, square: SquareType) => void;
   onRightClick: (event: MouseEvent) => void;
   onSelect: (event: MouseEvent, square: SquareType) => void;
+  onReset: () => void;
+  onUndo: () => void;
 };
 
 export const ActionsContext = createContext<ActionsContextType | null>(null);
