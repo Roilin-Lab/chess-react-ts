@@ -24,9 +24,7 @@ const ChessBoard: FC<ChessBoardProps> = () => {
   const [avalibleSquare, setAvalibleSquare] = useState<Move[]>([]);
 
   const handleMove = (e: MouseEvent, square: Square) => {
-    const move = chess
-      .moves({ square: selected!, verbose: true })
-      .find((move) => move.to === square);
+    const move = avalibleSquare.find((move) => move.to === square);
     if (move) {
       onMove(e, square, move);
       setSelected(null);
@@ -51,10 +49,10 @@ const ChessBoard: FC<ChessBoardProps> = () => {
         row.map((square, colIndex) => {
           const piece = positions?.[square];
           const color = (rowIndex + colIndex) % 2 === 0 ? "w" : "b";
+          const squares = avalibleSquare.find((move) => move.to === square);
+          const isAvalible = squares ? true : false;
           const isSelected = selected === square;
-          const isAvalible = avalibleSquare.find((move) => move.to === square)
-            ? true
-            : false;
+          const isInCheck = chess.inCheck() && piece?.color === chess.turn();
 
           return (
             <SquareComponent
@@ -64,8 +62,9 @@ const ChessBoard: FC<ChessBoardProps> = () => {
               piece={piece}
               isSelect={isSelected}
               isAvalible={isAvalible}
+              isInCheck={isInCheck}
               onSelect={useCallback(handleSelect, [])}
-              onMove={useCallback(handleMove, [])}
+              onMove={useCallback(handleMove, [squares])}
             />
           );
         })
