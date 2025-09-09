@@ -12,11 +12,11 @@ import { ActionsContext, type ActionsContextType } from "./ActionsContext";
 import {
   generateBoard,
   type Color,
-  type SquareIdType,
+  type PositionsType,
   type SquareType,
 } from "../chess";
 import { positionsFromFen } from "../chess/utils";
-import { Chess, type Move } from "chess.js";
+import { Chess, type Move, type Square } from "chess.js";
 
 interface ChessboardProviderProps extends PropsWithChildren {}
 
@@ -26,66 +26,77 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
   children,
 }) => {
   const [boardOrientation, setBoardOrientation] = useState<Color>("w");
-  const [selectedSquare, setSelectedSquare] = useState<SquareIdType | null>(
-    null
+  const [positions, setPositions] = useState<PositionsType>(
+    positionsFromFen(FEN)
+  );
+  const [selected, setSelected] = useState<Square | null>(null);
+  const [avalibleSquare, setAvalibleSquare] = useState<Move[]>([]);
+  const chess = useMemo(() => new Chess(FEN), []);
+  const board = useMemo(
+    () => generateBoard(boardOrientation),
+    [boardOrientation]
   );
 
-  const [state, setState] = useState<GameContextType>({
-    chess: new Chess(FEN),
-    move: "w",
-    positions: positionsFromFen(FEN),
-    history: [],
-  });
-
-  const handleContextMenu = useCallback((e: MouseEvent) => {
+  const onRightClick = useCallback((e: MouseEvent) => {
     e.preventDefault();
     setBoardOrientation((boardOrientation) =>
       boardOrientation === "w" ? "b" : "w"
     );
   }, []);
-  const handleMove = useCallback(
-    (e: MouseEvent, square: SquareType, move: Move) => {
-      setState((prevState) => {
-        const newPos = { ...prevState.positions };
-        newPos[square] = { type: move.piece, color: move.color };
-        delete newPos[move.from];
+  const onMove = useCallback(
+    (e: MouseEvent, square: SquareType) => {
+      const move = avalibleSquare.find((move) => move.to === square);
+      console.log(avalibleSquare);
+      if (move) {
+        setPositions((prevPositions) => {
+          const newPos = { ...prevPositions };
+          newPos[square] = { type: move.piece, color: move.color };
+          delete newPos[move.from];
 
-        return {
-          ...prevState,
-          move: prevState.move === "w" ? "b" : "w",
-          positions: { ...newPos },
-        };
-      });
-      state.chess.move({ from: move.from, to: move.to });
+          return { ...newPos };
+        });
+        setSelected(null);
+        setAvalibleSquare([]);
+        chess.move({ from: move.from, to: move.to });
+      }
     },
-    []
+    [positions, selected, avalibleSquare]
   );
 
-  const handleSelect = useCallback((e: MouseEvent, square: SquareType) => {
-
+  const onSelect = useCallback((e: MouseEvent, square: SquareType) => {
+    const piece = chess.get(square);
+    if (piece && piece.color === chess.turn()) {
+      setSelected(square);
+      setAvalibleSquare(chess.moves({ square: square, verbose: true }));
+    } else {
+      setSelected(null);
+      setAvalibleSquare([]);
+    }
   }, []);
 
-  const board = useMemo(
-    () => generateBoard(boardOrientation),
-    [boardOrientation]
-  );
   const boardValue: BoardContextType = useMemo(
     () => ({
       board: board,
       boardOrientation,
-      selected: selectedSquare,
-
     }),
     [boardOrientation]
   );
   const actionsValue: ActionsContextType = useMemo(
     () => ({
-      onRightClick: handleContextMenu,
-      onMove: handleMove,
-      onSelect: handleSelect,
-      setSelectedSquare,
+      onRightClick,
+      onMove,
+      onSelect,
     }),
-    []
+    [onMove, onSelect, onRightClick]
+  );
+  const state: GameContextType = useMemo(
+    () => ({
+      chess: chess,
+      positions,
+      selected,
+      avalibleSquare,
+    }),
+    [positions, selected, actionsValue]
   );
 
   return (

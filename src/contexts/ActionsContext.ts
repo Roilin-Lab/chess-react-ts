@@ -1,15 +1,12 @@
 import {
   createContext,
   useContext,
-  type Dispatch,
   type MouseEvent,
-  type SetStateAction,
 } from "react";
 import { type SquareType } from "../chess";
-import type { Move } from "chess.js";
 
 export type ActionsContextType = {
-  onMove: (event: MouseEvent, square: SquareType, move: Move) => void;
+  onMove: (event: MouseEvent, square: SquareType) => void;
   onRightClick: (event: MouseEvent) => void;
   onSelect: (event: MouseEvent, square: SquareType) => void;
 };
