@@ -85,8 +85,8 @@ const ChessBoard: FC<ChessBoardProps> = () => {
   const capturedPool = (color: Color) => {
     return chess
       .history({ verbose: true })
-      .filter((move) => move.captured && move.color !== color)
-      .map((move) => getPieceUnicodeIcon(move.captured!, move.color));
+      .filter((move) => move.captured && move.color === color)
+      .map((move) => getPieceUnicodeIcon(move.captured!, move.color === "w" ? "b" : "w"));
   };
 
   return (
