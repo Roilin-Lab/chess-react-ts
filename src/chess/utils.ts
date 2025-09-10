@@ -47,12 +47,14 @@ export function replacePieceToUnicodeIcon(move: Move): string | null {
     b: "♝",
     p: "♟",
   };
-  const piece =
+  const isPromotion = move.isPromotion();
+  const piece = isPromotion ? move.promotion! : move.piece;
+  const pieceIcon =
     move.color === "w"
-      ? unicodeWhitePiece[move.piece]
-      : unicodeBlackPiece[move.piece];
+      ? unicodeWhitePiece[piece]
+      : unicodeBlackPiece[piece];
 
-  return move.san.replace(/^[KQRNB]/, piece);
+  return move.san.replace(/[KQRNB]/, pieceIcon);
 }
 
 export function boardToPositions(

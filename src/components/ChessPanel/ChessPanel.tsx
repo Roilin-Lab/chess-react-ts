@@ -55,7 +55,7 @@ const ActionButton = styled.button`
 
 const ChessPanel: React.FC<ChessPanelProps> = ({}) => {
   const { chess } = useGameContext();
-  const { onReset, onUndo, onRightClick } = useActionsContext();
+  const { onReset, onUndo, onTurnBoard } = useActionsContext();
 
   let moveNumber = 1;
   return (
@@ -80,7 +80,7 @@ const ChessPanel: React.FC<ChessPanelProps> = ({}) => {
           })}
         </HistoryList>
         <ActionsContainer>
-          <ActionButton title="Перевернуть доску" onClick={onRightClick}>
+          <ActionButton title="Перевернуть доску" onClick={onTurnBoard}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

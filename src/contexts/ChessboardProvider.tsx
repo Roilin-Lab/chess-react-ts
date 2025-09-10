@@ -16,7 +16,7 @@ import {
   type SquareType,
 } from "../chess";
 import { boardToPositions, positionsFromFen } from "../chess/utils";
-import { Chess, type Move, type Square } from "chess.js";
+import { Chess, type Move, type PieceSymbol, type Square } from "chess.js";
 
 interface ChessboardProviderProps extends PropsWithChildren {}
 
@@ -31,14 +31,16 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
   );
   const [selected, setSelected] = useState<Square | null>(null);
   const [avalibleSquare, setAvalibleSquare] = useState<Move[]>([]);
+  const [showPromotinChoise, setShowPromotinChoise] = useState<boolean>(false);
+  const [promotionMove, setPromotionMove] = useState<Move | null>(null);
+
   const chess = useMemo(() => new Chess(FEN), []);
   const board = useMemo(
     () => generateBoard(boardOrientation),
     [boardOrientation]
   );
 
-  const onRightClick = useCallback((e: MouseEvent) => {
-    e.preventDefault();
+  const onTurnBoard = useCallback((e: MouseEvent) => {
     setBoardOrientation((boardOrientation) =>
       boardOrientation === "w" ? "b" : "w"
     );
@@ -47,13 +49,21 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
     (e: MouseEvent, square: SquareType) => {
       const move = avalibleSquare.find((move) => move.to === square);
       if (move) {
-        chess.move({ from: move.from, to: move.to });
+        if (move.isPromotion()) {
+          console.log(move);
+          
+          setPromotionMove(move)
+          setShowPromotinChoise(true);
+          return;
+        }
+        chess.move(move);
+
         setPositions(boardToPositions(chess.board()));
         setSelected(null);
         setAvalibleSquare([]);
       }
     },
-    [positions, selected, avalibleSquare]
+    [positions, selected, avalibleSquare, promotionMove]
   );
 
   const onSelect = useCallback((e: MouseEvent, square: SquareType) => {
@@ -66,6 +76,18 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
       setAvalibleSquare([]);
     }
   }, []);
+
+  const onPromotion = useCallback((piece: PieceSymbol) => {
+    if (promotionMove) {
+      promotionMove.promotion = piece;
+      chess.move(promotionMove);
+    }
+
+    setPositions(boardToPositions(chess.board()));
+    setPromotionMove(null);
+    setSelected(null);
+    setAvalibleSquare([]);
+  }, [promotionMove]);
 
   const onReset = useCallback(() => {
     chess.reset();
@@ -81,18 +103,21 @@ export const ChessboardProvider: FC<ChessboardProviderProps> = ({
     () => ({
       board: board,
       boardOrientation,
+      showPromotinChoise,
     }),
-    [boardOrientation]
+    [boardOrientation, showPromotinChoise]
   );
   const actionsValue: ActionsContextType = useMemo(
     () => ({
-      onRightClick,
+      onTurnBoard,
       onMove,
       onSelect,
       onReset,
-      onUndo
+      onUndo,
+      onPromotion,
+      setShowPromotinChoise,
     }),
-    [onMove, onSelect, onRightClick]
+    [onMove, onSelect, onTurnBoard, onPromotion]
   );
   const state: GameContextType = useMemo(
     () => ({

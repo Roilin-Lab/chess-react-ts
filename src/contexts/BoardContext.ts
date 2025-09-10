@@ -8,6 +8,7 @@ import { type SquareType, type Color } from "../chess";
 export type BoardContextType = {
   board: SquareType[][];
   boardOrientation: Color;
+  showPromotinChoise: boolean;
 };
 
 export const BoardContext = createContext<BoardContextType | null>(null);
