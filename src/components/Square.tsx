@@ -60,6 +60,10 @@ const Label = styled.span`
   font-family: Noto Sans, sans-serif;
   font-size: 1.8rem;
   font-weight: bold;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 `;
 const LabelFile = styled(Label)`
   top: 5%;
@@ -105,10 +109,12 @@ const Square: FC<SquareProps> = memo(
         id={id}
         $color={color}
         onMouseDown={(e) => {
-          if (isAvalible) {
-            onMove(e, id);
-          } else {
-            onSelect(e, id);
+          if (e.button === 0) {
+            if (isAvalible) {
+              onMove(e, id);
+            } else {
+              onSelect(e, id);
+            }
           }
         }}
       >

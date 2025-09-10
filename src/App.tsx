@@ -1,4 +1,4 @@
-import ChessLayout from "./components/ChessLayout/ChessLayout";
+import ChessLayout from "./components/ChessLayout";
 
 import "./App.css";
 

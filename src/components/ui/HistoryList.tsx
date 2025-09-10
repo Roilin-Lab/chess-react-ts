@@ -1,4 +1,4 @@
-import { useEffect, useRef, type FC, type PropsWithChildren, type ReactElement } from "react";
+import { useEffect, useRef, type PropsWithChildren } from "react";
 import styled from "styled-components";
 
 interface HistoryListProps extends PropsWithChildren {}

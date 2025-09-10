@@ -30,7 +30,7 @@ export function positionsFromFen(fen: string): PositionsType {
   return positions;
 }
 
-export function replacePieceToUnicodeIcon(move: Move): string | null {
+export function getPieceUnicodeIcon(piece: PieceSymbol, color: Color): string {
   const unicodeBlackPiece = {
     k: "♔",
     q: "♕",
@@ -47,12 +47,14 @@ export function replacePieceToUnicodeIcon(move: Move): string | null {
     b: "♝",
     p: "♟",
   };
+
+  return color === "w" ? unicodeWhitePiece[piece] : unicodeBlackPiece[piece];
+}
+
+export function replaceMoveToUnicodeIcon(move: Move): string | null {
   const isPromotion = move.isPromotion();
   const piece = isPromotion ? move.promotion! : move.piece;
-  const pieceIcon =
-    move.color === "w"
-      ? unicodeWhitePiece[piece]
-      : unicodeBlackPiece[piece];
+  const pieceIcon = getPieceUnicodeIcon(piece, move.color);
 
   return move.san.replace(/[KQRNB]/, pieceIcon);
 }
