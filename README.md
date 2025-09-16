@@ -1,19 +1,19 @@
-React Chess App
+### React Chess App
 A modern chess game built with React, Vite, and chess.js. Features a clean UI, move validation, game history, and more.
 
-Features
-♟️ Full chess rules enforcement using chess.js
+#### Features:
+- ♟️ Full chess rules enforcement using chess.js
 
-🔄 Move history navigation (undo)
+- 🔄 Move history navigation (undo)
 
-🎨 Responsive and clean UI
+- 🎨 Responsive and clean UI
 
-♻️ Highlight legal moves
+- ♻️ Highlight legal moves
 
-📱 Mobile-friendly design
+- 📱 Mobile-friendly design
 
 ---
 
-![Screenshot 1](doc/image1.png)
+![Video 1](doc/video.gif)
 ![Screenshot 2](doc/image2.png)
 
